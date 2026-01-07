@@ -13,7 +13,7 @@ workspace "Trifolium" "Sistema de Finanças Pessoais" {
             }
         }
         
-        emailSystem = softwareSystem "Sistema de E-mail" "Gmail" "External System"
+        emailSystem = softwareSystem "Email system" "Gmail" "External System"
 
         user -> webapp "Interacts with" "Web Browser"
         emailSystem -> user "Sends verification E-mail" "SMTP"
