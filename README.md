@@ -1,4 +1,4 @@
-# Trifolium
+# Trifolium 🍀
 A personal finances app.
 
 ## Structurizr
