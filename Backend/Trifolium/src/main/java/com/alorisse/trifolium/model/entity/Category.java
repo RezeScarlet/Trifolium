@@ -1,4 +1,4 @@
-package com.alorisse.trifolium.model;
+package com.alorisse.trifolium.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

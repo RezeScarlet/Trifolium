@@ -1,4 +1,4 @@
-package com.alorisse.trifolium.model;
+package com.alorisse.trifolium.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,15 +7,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", schema = "public")
-public class User {
+@Table(name = "types", schema = "public")
+public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "username", nullable = false, length = 25)
-    private String username;
+    @Column(name = "title", nullable = false, length = 100)
+    private String title;
 
 
 }
