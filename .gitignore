@@ -25,3 +25,8 @@ replay_pid*
 
 .structurizr/
 
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
