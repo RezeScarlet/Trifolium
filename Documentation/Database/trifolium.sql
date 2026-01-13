@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(25) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS  types (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(100) NOT NULL
+    username VARCHAR(25) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password_salt BYTEA,
+    password_hash BYTEA,
+    provider_id VARCHAR(255),
+    provider VARCHAR(6)
 );
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -22,10 +22,9 @@ CREATE TABLE IF NOT EXISTS transactions (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     title VARCHAR(100),
     description TEXT,
-    type_id INTEGER NOT NULL,
+    type VARCHAR(7),
     category_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     CONSTRAINT fk_transaction_user FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_transaction_category FOREIGN KEY (category_id) REFERENCES categories (id),
-    CONSTRAINT fk_transaction_type FOREIGN KEY (type_id) REFERENCES types (id)
+    CONSTRAINT fk_transaction_category FOREIGN KEY (category_id) REFERENCES categories (id)
 );
