@@ -1,5 +1,6 @@
 package com.alorisse.trifolium.model.entity;
 
+import com.alorisse.trifolium.model.enums.Type;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,8 +32,8 @@ public class Transaction {
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "type_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private Type type;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
