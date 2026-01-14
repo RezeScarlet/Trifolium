@@ -4,7 +4,6 @@ import com.alorisse.trifolium.model.enums.AuthProvider;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.type.descriptor.jdbc.VarbinaryJdbcType;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "username", nullable = false, length = 25)
     private String username;
@@ -23,13 +22,13 @@ public class User {
     private String email;
 
     @Column(name = "password_hash")
-    private Byte[] password_hash;
+    private byte[] passwordHash;
 
-    @Column(name = "password_hash")
-    private Byte[] password_salt;
+    @Column(name = "password_salt")
+    private byte[] passwordSalt;
 
     @Column(name = "provider_id")
-    private String provider_id;
+    private String providerId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
