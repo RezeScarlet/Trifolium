@@ -20,6 +20,9 @@ public class Category {
     @Column(name = "icon", length = 25)
     private String icon;
 
+    @Column(name = "color", length = 7)
+    private String color;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

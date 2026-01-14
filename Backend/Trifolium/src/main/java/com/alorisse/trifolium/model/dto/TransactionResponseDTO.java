@@ -1,7 +1,5 @@
 package com.alorisse.trifolium.model.dto;
 
-import com.alorisse.trifolium.model.entity.User;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 
