@@ -45,4 +45,6 @@ public class Transaction {
     private User user;
 
 
+    public void setDescription(String dto) {
+    }
 }
