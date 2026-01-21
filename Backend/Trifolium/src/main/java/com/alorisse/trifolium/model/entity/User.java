@@ -21,11 +21,8 @@ public class User {
     @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(name = "password_hash")
-    private byte[] passwordHash;
-
-    @Column(name = "password_salt")
-    private byte[] passwordSalt;
+    @Column(name = "password")
+    private byte[] password;
 
     @Column(name = "provider_id")
     private String providerId;
