@@ -2,15 +2,11 @@ package com.alorisse.trifolium.model.entity;
 
 import com.alorisse.trifolium.model.enums.Type;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "transactions", schema = "public")
 public class Transaction {
@@ -46,5 +42,65 @@ public class Transaction {
 
 
     public void setDescription(String dto) {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public BigDecimal getAmount() {
+        return this.amount;
+    }
+
+    public Instant getDateTime() {
+        return this.dateTime;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Type getType() {
+        return this.type;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setDateTime(Instant dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

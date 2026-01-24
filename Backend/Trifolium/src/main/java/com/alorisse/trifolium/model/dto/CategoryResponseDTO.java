@@ -4,6 +4,6 @@ public record CategoryResponseDTO(
         Long id,
         String title,
         String color,
-        String icon,
-        boolean isCustom) {
+        String icon
+) {
 }

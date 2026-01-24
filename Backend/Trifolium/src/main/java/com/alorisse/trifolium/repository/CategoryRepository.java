@@ -11,6 +11,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c WHERE c.user.id = :userId OR c.user IS NULL")
-    List<Category> findAllByUserIdOrSystem(Long userId);
+    List<Category> findAllByUserIdOrSystemOrderById(Long userId);
 
 }
