@@ -1,9 +1,8 @@
 package com.alorisse.trifolium.controller;
 
+import com.alorisse.trifolium.model.dto.TransactionRequestDTO;
 import com.alorisse.trifolium.model.dto.TransactionResponseDTO;
-import com.alorisse.trifolium.model.entity.Transaction;
 import com.alorisse.trifolium.model.entity.User;
-import com.alorisse.trifolium.repository.TransactionRepository;
 import com.alorisse.trifolium.repository.UserRepository;
 import com.alorisse.trifolium.service.TransactionService;
 import jakarta.validation.Valid;
@@ -32,8 +31,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionResponseDTO dto, Authentication authentication) {
-        User user = getAuthenticatedUser((authentication));
+    public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO dto, Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
         TransactionResponseDTO response = transactionService.create(dto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
