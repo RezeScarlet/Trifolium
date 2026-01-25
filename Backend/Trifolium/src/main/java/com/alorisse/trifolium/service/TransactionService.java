@@ -27,7 +27,7 @@ public class TransactionService {
     }
 
 
-    public TransactionResponseDTO create(@Valid TransactionResponseDTO dto, User user) {
+    public TransactionResponseDTO create(TransactionResponseDTO dto, User user) {
         Category category = categoryRepository.findById(dto.categoryId()).orElseThrow(() -> new RuntimeException("Category not found."));
         Transaction transaction = transactionMapper.toEntity(dto, user, category);
         Transaction saved = transactionRepository.save(transaction);

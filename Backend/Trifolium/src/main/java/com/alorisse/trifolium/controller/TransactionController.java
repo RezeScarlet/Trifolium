@@ -35,8 +35,7 @@ public class TransactionController {
     public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionResponseDTO dto, Authentication authentication) {
         User user = getAuthenticatedUser((authentication));
         TransactionResponseDTO response = transactionService.create(dto, user);
-        return ResponseEntity.status((HttpStatus.CREATED).body(response));
-
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
