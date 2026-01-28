@@ -35,23 +35,30 @@ public class CategoryServiceTest {
         User user = new User();
         user.setId(1L);
 
-        CategoryRequestDTO requestDTO = new CategoryRequestDTO("Food", "food_icon", "#FFBBCC");
+        CategoryRequestDTO requestDTO = new CategoryRequestDTO(
+                "Food",
+                "food_icon",
+                "#FFBBCC");
 
         Category category = new Category();
         category.setId(10L);
         category.setTitle("Food");
         category.setUser(user);
 
-        CategoryResponseDTO responseDTO = new CategoryResponseDTO(10L, "Food", "food_icon", "#FFBBCC");
+        CategoryResponseDTO responseDTO = new CategoryResponseDTO(
+                10L,
+                "Food",
+                "food_icon",
+                "#FFBBCC");
 
         when(categoryMapper.toEntity(requestDTO, user)).thenReturn(category);
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
         when(categoryMapper.toDTO(category)).thenReturn(responseDTO);
 
-        CategoryResponseDTO resultado = categoryService.create(requestDTO, user);
+        CategoryResponseDTO result = categoryService.create(requestDTO, user);
 
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.title()).isEqualTo("Food");
+        assertThat(result).isNotNull();
+        assertThat(result.title()).isEqualTo("Food");
 
         verify(categoryRepository, times(1)).save(any(Category.class));
     }
