@@ -12,8 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -62,5 +63,62 @@ public class CategoryServiceTest {
         assertThat(result.icon()).isEqualTo(icon);
 
         verify(categoryRepository, times(1)).save(any(Category.class));
+    }
+
+    @Test
+    @DisplayName("Should list User and System Categories")
+    void shouldListUserAndSystemCategories() {
+        User user = new User();
+        user.setId(1L);
+
+        Long idByUser = 10L;
+        String titleByUser = "Food";
+        String colorByUser = "#FFBBCC";
+        String iconByUser = "food_icon";
+
+        Long idBySystem = 11L;
+        String titleBySystem = "Fare";
+        String colorBySystem = "#FFFFBB";
+        String iconBySystem = "fare_icon";
+
+        Category categoryByUser = new Category();
+        categoryByUser.setId(idByUser);
+        categoryByUser.setTitle(titleByUser);
+        categoryByUser.setColor(colorByUser);
+        categoryByUser.setIcon(iconByUser);
+        categoryByUser.setUser(user);
+
+        Category categoryBySystem = new Category();
+        categoryBySystem.setId(idBySystem);
+        categoryBySystem.setTitle(titleBySystem);
+        categoryBySystem.setColor(colorBySystem);
+        categoryBySystem.setIcon(iconBySystem);
+        categoryBySystem.setUser(null);
+
+        List<Category> entitiesList = List.of(categoryByUser, categoryBySystem);
+
+        CategoryResponseDTO responseByUser = new CategoryResponseDTO(
+                idByUser,
+                titleByUser,
+                colorByUser,
+                iconByUser);
+
+        CategoryResponseDTO responseBySystem = new CategoryResponseDTO(
+                idBySystem,
+                titleBySystem,
+                colorBySystem,
+                iconBySystem);
+
+        when(categoryRepository.findAllByUserIdOrSystemOrderById(user.getId())).thenReturn(entitiesList);
+
+        when(categoryMapper.toDTO(categoryByUser)).thenReturn(responseByUser);
+        when(categoryMapper.toDTO(categoryBySystem)).thenReturn(responseBySystem);
+
+        List<CategoryResponseDTO> result = categoryService.listAll(user);
+
+        assertThat(result).containsExactlyInAnyOrder(responseByUser);
+        assertThat(result).containsExactlyInAnyOrder(responseBySystem);
+
+        verify(categoryRepository, times(1)).findAllByUserIdOrSystemOrderById(user.getId());
     }
 }
