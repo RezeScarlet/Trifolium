@@ -1,9 +1,18 @@
 <p align="center">
   <img src="./Frontend/src/assets/Trifolium_text.svg" alt="Trifolium Logo" width="600">
-  <p align="center">A personal finances app built with React and Java Spring Boot.</p>
+  <p align="center"><b>A personal finances app built with React and Java.<b></p>
 </p>
-
-
+    
+<div align="center">
+  <h3>Trifolium</h3>
+  <em>/tɾiˈfɔ.li.um/ • noun</em><br>
+  <br>
+  <p>
+    1. From Latin: union of <i>tres</i> (three) and <i>folium</i> (leaf).<br>
+    2. Botanical genus of clovers; symbol of luck and financial prosperity.
+  </p>
+</div>
+    
 ## How to Run the Application
 ### Structurizr
 `docker run --rm -p 8080:8080 -v $PWD:/usr/local/structurizr structurizr/lite`
