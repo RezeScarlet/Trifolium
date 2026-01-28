@@ -36,7 +36,7 @@ public class CategoryService {
     public CategoryResponseDTO update(Long id, CategoryRequestDTO dto, User user) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found."));
 
-        if (!category.getId().equals(user.getId())) {
+        if (!category.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("User doesn't own this transaction.");
         }
 
@@ -52,9 +52,11 @@ public class CategoryService {
     public void delete(Long id, User user) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found."));
 
-        if (!category.getId().equals(user.getId())) {
+        if (!category.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("User doesn't own this transaction.");
         }
+
+        categoryRepository.delete(category);
     }
 
 }
