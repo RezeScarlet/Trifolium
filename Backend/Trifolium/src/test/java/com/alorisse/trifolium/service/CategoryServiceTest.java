@@ -35,35 +35,38 @@ public class CategoryServiceTest {
         User user = new User();
         user.setId(1L);
 
-        Long cat_id = 10L;
-        String cat_title = "Food";
-        String cat_color = "#FFBBCC";
-        String cat_icon = "food_icon";
+        Long categoryId = 10L;
+        String categoryTitle = "Food";
+        String categoryColor = "#FFBBCC";
+        String categoryIcon = "food_icon";
 
-        CategoryRequestDTO requestDTO = new CategoryRequestDTO(
-                cat_title,
-                cat_color,
-                cat_icon);
+        CategoryRequestDTO categoryRequestDTO = new CategoryRequestDTO(
+                categoryTitle,
+                categoryColor,
+                categoryIcon);
 
-        Category category = new Category();
-        category.setId(cat_id);
-        category.setTitle(cat_title);
-        category.setUser(user);
+        Category categoryEntity = new Category();
+        categoryEntity.setId(categoryId);
+        categoryEntity.setTitle(categoryTitle);
+        categoryEntity.setUser(user);
 
-        CategoryResponseDTO responseDTO = new CategoryResponseDTO(
-                cat_id,
-                cat_title,
-                cat_color,
-                cat_icon);
+        CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO(
+                categoryId,
+                categoryTitle,
+                categoryColor,
+                categoryIcon);
 
-        when(categoryMapper.toEntity(requestDTO, user)).thenReturn(category);
-        when(categoryRepository.save(any(Category.class))).thenReturn(category);
-        when(categoryMapper.toDTO(category)).thenReturn(responseDTO);
+        when(categoryMapper.toEntity(categoryRequestDTO, user)).thenReturn(categoryEntity);
+        when(categoryRepository.save(any(Category.class))).thenReturn(categoryEntity);
+        when(categoryMapper.toDTO(categoryEntity)).thenReturn(categoryResponseDTO);
 
-        CategoryResponseDTO result = categoryService.create(requestDTO, user);
+        CategoryResponseDTO categoryResult = categoryService.create(categoryRequestDTO, user);
 
-        assertThat(result).isNotNull();
-        assertThat(result.title()).isEqualTo(cat_title);
+        assertThat(categoryResult).isNotNull();
+        assertThat(categoryResult.title()).isEqualTo(categoryTitle);
+        assertThat(categoryResult.id()).isEqualTo(categoryId);
+        assertThat(categoryResult.color()).isEqualTo(categoryColor);
+        assertThat(categoryResult.icon()).isEqualTo(categoryIcon);
 
         verify(categoryRepository, times(1)).save(any(Category.class));
     }
