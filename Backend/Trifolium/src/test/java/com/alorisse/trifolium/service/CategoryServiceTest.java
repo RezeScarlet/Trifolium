@@ -35,21 +35,26 @@ public class CategoryServiceTest {
         User user = new User();
         user.setId(1L);
 
+        Long cat_id = 10L;
+        String cat_title = "Food";
+        String cat_color = "#FFBBCC";
+        String cat_icon = "food_icon";
+
         CategoryRequestDTO requestDTO = new CategoryRequestDTO(
-                "Food",
-                "food_icon",
-                "#FFBBCC");
+                cat_title,
+                cat_color,
+                cat_icon);
 
         Category category = new Category();
-        category.setId(10L);
-        category.setTitle("Food");
+        category.setId(cat_id);
+        category.setTitle(cat_title);
         category.setUser(user);
 
         CategoryResponseDTO responseDTO = new CategoryResponseDTO(
-                10L,
-                "Food",
-                "food_icon",
-                "#FFBBCC");
+                cat_id,
+                cat_title,
+                cat_color,
+                cat_icon);
 
         when(categoryMapper.toEntity(requestDTO, user)).thenReturn(category);
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
@@ -58,9 +63,8 @@ public class CategoryServiceTest {
         CategoryResponseDTO result = categoryService.create(requestDTO, user);
 
         assertThat(result).isNotNull();
-        assertThat(result.title()).isEqualTo("Food");
+        assertThat(result.title()).isEqualTo(cat_title);
 
         verify(categoryRepository, times(1)).save(any(Category.class));
     }
-
 }
