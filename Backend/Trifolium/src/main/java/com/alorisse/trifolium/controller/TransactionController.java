@@ -14,21 +14,20 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
-    private final UserRepository userRepository;
 
-    public TransactionController(TransactionService transactionService, UserRepository userRepository) {
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.userRepository = userRepository;
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
-        if (authentication == null) {
+        if (authentication == null || !((authentication.getPrincipal()) instanceof User)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
         }
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+        return (User) authentication.getPrincipal();
     }
 
     @PostMapping

@@ -41,7 +41,8 @@ public class Transaction {
     private User user;
 
 
-    public void setDescription(String dto) {
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getId() {

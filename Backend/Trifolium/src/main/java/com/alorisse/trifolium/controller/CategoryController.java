@@ -17,21 +17,19 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
-    private final UserRepository userRepository;
 
-    public CategoryController(CategoryService categoryService, UserRepository userRepository) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.userRepository = userRepository;
     }
 
     private User getAuthenticatedUser(Authentication authentication) {
-        if (authentication == null) {
+        if (authentication == null || !((authentication.getPrincipal()) instanceof User)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
         }
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+        return (User) authentication.getPrincipal();
     }
 
     @PostMapping
@@ -56,7 +54,7 @@ public class CategoryController {
 
     }
 
-    @DeleteMapping("/{id]")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
         categoryService.delete(id, user);
