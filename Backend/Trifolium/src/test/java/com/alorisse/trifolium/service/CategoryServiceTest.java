@@ -4,6 +4,7 @@ import com.alorisse.trifolium.mapper.CategoryMapper;
 import com.alorisse.trifolium.model.dto.CategoryRequestDTO;
 import com.alorisse.trifolium.model.dto.CategoryResponseDTO;
 import com.alorisse.trifolium.model.entity.Category;
+import com.alorisse.trifolium.model.entity.User;
 import com.alorisse.trifolium.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.alorisse.trifolium.model.entity.User;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,38 +35,31 @@ public class CategoryServiceTest {
         User user = new User();
         user.setId(1L);
 
-        Long categoryId = 10L;
-        String categoryTitle = "Food";
-        String categoryColor = "#FFBBCC";
-        String categoryIcon = "food_icon";
+        Long id = 10L;
+        String title = "Food";
+        String color = "#FFBBCC";
+        String icon = "food_icon";
 
-        CategoryRequestDTO categoryRequestDTO = new CategoryRequestDTO(
-                categoryTitle,
-                categoryColor,
-                categoryIcon);
+        CategoryRequestDTO request = new CategoryRequestDTO(title, color, icon);
 
-        Category categoryEntity = new Category();
-        categoryEntity.setId(categoryId);
-        categoryEntity.setTitle(categoryTitle);
-        categoryEntity.setUser(user);
+        Category category = new Category();
+        category.setId(id);
+        category.setTitle(title);
+        category.setUser(user);
 
-        CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO(
-                categoryId,
-                categoryTitle,
-                categoryColor,
-                categoryIcon);
+        CategoryResponseDTO expectedResponse = new CategoryResponseDTO(id, title, color, icon);
 
-        when(categoryMapper.toEntity(categoryRequestDTO, user)).thenReturn(categoryEntity);
-        when(categoryRepository.save(any(Category.class))).thenReturn(categoryEntity);
-        when(categoryMapper.toDTO(categoryEntity)).thenReturn(categoryResponseDTO);
+        when(categoryMapper.toEntity(request, user)).thenReturn(category);
+        when(categoryRepository.save(any(Category.class))).thenReturn(category);
+        when(categoryMapper.toDTO(category)).thenReturn(expectedResponse);
 
-        CategoryResponseDTO categoryResult = categoryService.create(categoryRequestDTO, user);
+        CategoryResponseDTO result = categoryService.create(request, user);
 
-        assertThat(categoryResult).isNotNull();
-        assertThat(categoryResult.title()).isEqualTo(categoryTitle);
-        assertThat(categoryResult.id()).isEqualTo(categoryId);
-        assertThat(categoryResult.color()).isEqualTo(categoryColor);
-        assertThat(categoryResult.icon()).isEqualTo(categoryIcon);
+        assertThat(result).isNotNull();
+        assertThat(result.id()).isEqualTo(id);
+        assertThat(result.title()).isEqualTo(title);
+        assertThat(result.color()).isEqualTo(color);
+        assertThat(result.icon()).isEqualTo(icon);
 
         verify(categoryRepository, times(1)).save(any(Category.class));
     }
