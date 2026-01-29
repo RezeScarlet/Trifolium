@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -35,22 +36,16 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should create a category successfully")
     void shouldCreateCategorySuccessfully() {
-        User user = new User();
-        user.setId(1L);
+        User user = buildUser();
 
-        Long id = 10L;
-        String title = "Food";
-        String color = "#FFBBCC";
-        String icon = "food_icon";
+        Category category = buildCategory(user);
+        Long id = category.getId();
+        String title = category.getTitle();
+        String color = category.getColor();
+        String icon = category.getIcon();
 
         CategoryRequestDTO request = new CategoryRequestDTO(title, color, icon);
 
-        Category category = new Category();
-        category.setId(id);
-        category.setTitle(title);
-        category.setColor(color);
-        category.setIcon(icon);
-        category.setUser(user);
 
         CategoryResponseDTO expectedResponse = new CategoryResponseDTO(id, title, color, icon);
 
@@ -72,23 +67,19 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should list User and System Categories")
     void shouldListUserAndSystemCategories() {
-        User user = new User();
-        user.setId(1L);
+        User user = buildUser();
 
-        Long idByUser = 10L;
-        String titleByUser = "Food";
-        String colorByUser = "#FFBBCC";
-        String iconByUser = "food_icon";
+        Category categoryByUser = buildCategory(user);
+        String titleByUser = categoryByUser.getTitle();
+        String colorByUser = categoryByUser.getColor();
+        String iconByUser = categoryByUser.getIcon();
 
         Long idBySystem = 11L;
         String titleBySystem = "Fare";
         String colorBySystem = "#FFFFBB";
         String iconBySystem = "fare_icon";
 
-        Category categoryByUser = new Category();
-        categoryByUser.setId(idByUser);
-        categoryByUser.setTitle(titleByUser);
-        categoryByUser.setUser(user);
+        Long idByUser = categoryByUser.getId();
 
         Category categoryBySystem = new Category();
         categoryBySystem.setId(idBySystem);
@@ -124,14 +115,10 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should update Category successfully")
     void shouldUpdateCategorySuccessfully() {
-        User user = new User();
-        user.setId(1L);
+        User user = buildUser();
 
-        Long id = 10L;
-
-        String oldTitle = "Food";
-        String oldColor = "#FFBBCC";
-        String oldIcon = "food_icon";
+        Category oldCategory = buildCategory(user);
+        Long id = oldCategory.getId();
 
         String newTitle = "Fare";
         String newColor = "#FFFFBB";
@@ -139,13 +126,8 @@ public class CategoryServiceTest {
 
         CategoryRequestDTO newRequest = new CategoryRequestDTO(newTitle, newColor, newIcon);
 
-        Category oldCategory = new Category();
-        oldCategory.setId(id);
-        oldCategory.setTitle(oldTitle);
-        oldCategory.setColor(oldColor);
-        oldCategory.setIcon(oldIcon);
-        oldCategory.setUser(user);
 
+        // TODO add another argument to factory to simplify this
         Category newCategory = new Category();
         newCategory.setId(id);
         newCategory.setTitle(newTitle);
@@ -175,16 +157,10 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should delete Category")
     void shouldDeleteCategory() {
-        User user = new User();
-        user.setId(1L);
+        User user = buildUser();
 
-        Long id = 10L;
-        String title = "Food";
-
-        Category category = new Category();
-        category.setId(id);
-        category.setTitle(title);
-        category.setUser(user);
+        Category category = buildCategory(user);
+        Long id = category.getId();
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
 
@@ -196,11 +172,11 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should throw exception when Category not Found")
     void shouldThrowExceptionWhenCategoryNotFound() {
-        User user = new User();
-        user.setId(1L);
+        User user = buildUser();
 
         Long invalidID = 999L;
 
+        // TODO Make a factory for CategoryResquestDTO
         String title = "Food";
         String color = "#FFBBCC";
         String icon = "food_icon";
@@ -220,29 +196,41 @@ public class CategoryServiceTest {
     @Test
     @DisplayName("Should throw exception when User is not owner")
     void shouldThrowExceptionWhenUserIsNotOwner() {
-        User owner = new User();
-        owner.setId(1L);
+        User owner = buildUser();
 
-        Long otherUserId = 999L;
+        User notOwner = new User();
+        notOwner.setId(999L);
 
-        User otherUser = new User();
-        otherUser.setId(otherUserId);
+        Category category = buildCategory(owner);
 
-        Long id = 10L;
-        String title = "Food";
-
-        Category category = new Category();
-        category.setId(id);
-        category.setTitle(title);
-        category.setUser(owner);
+        Long id = 1L;
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
 
         assertThrows(RuntimeException.class, () -> {
-            categoryService.delete(id, otherUser);
+            categoryService.delete(id, notOwner);
         });
 
         verify(categoryRepository, times(1)).findById(id);
         verify(categoryRepository, never()).delete(any());
+    }
+
+    private User buildUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@test.com");
+
+        return user;
+    }
+
+    private Category buildCategory(User user) {
+        Category category = new Category();
+        category.setId(1L);
+        category.setTitle("Food");
+        category.setColor("FFBBCC");
+        category.setIcon("food_icon");
+        category.setUser(user);
+
+        return category;
     }
 }
