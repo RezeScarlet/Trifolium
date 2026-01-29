@@ -176,9 +176,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findById(invalidID)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
-            categoryService.update(invalidID, request, user);
-        });
+        assertThrows(RuntimeException.class, () -> categoryService.update(invalidID, request, user));
 
         verify(categoryRepository, times(1)).findById(invalidID);
         verify(categoryRepository, never()).save(any());
@@ -198,9 +196,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
 
-        assertThrows(RuntimeException.class, () -> {
-            categoryService.delete(id, notOwner);
-        });
+        assertThrows(RuntimeException.class, () -> categoryService.delete(id, notOwner));
 
         verify(categoryRepository, times(1)).findById(id);
         verify(categoryRepository, never()).delete(any());
