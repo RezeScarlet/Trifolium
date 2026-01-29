@@ -50,7 +50,7 @@ public class TransactionServiceTest {
         Instant dateTime = Instant.now();
         String title = "Dinner";
         String description = "Spaghetti";
-        Type type = Type.OUTCOME;
+        String type = Type.OUTCOME.toString();
 
         Category category = new Category();
         category.setId(1L);
@@ -63,7 +63,7 @@ public class TransactionServiceTest {
                 dateTime,
                 title,
                 description,
-                type.toString(),
+                type,
                 category.getId()
         );
 
@@ -73,7 +73,7 @@ public class TransactionServiceTest {
         transaction.setDateTime(dateTime);
         transaction.setTitle(title);
         transaction.setDescription(description);
-        transaction.setType(type);
+        transaction.setType(Type.valueOf(type));
         transaction.setCategory(category);
         transaction.setUser(user);
 
@@ -83,7 +83,7 @@ public class TransactionServiceTest {
                 dateTime,
                 title,
                 description,
-                type.toString(),
+                type,
                 category.getTitle(),
                 category.getColor(),
                 category.getIcon()
@@ -102,7 +102,7 @@ public class TransactionServiceTest {
         assertThat(result.dateTime()).isEqualTo(dateTime);
         assertThat(result.title()).isEqualTo(title);
         assertThat(result.description()).isEqualTo(description);
-        assertThat(result.type()).isEqualTo(type.toString());
+        assertThat(result.type()).isEqualTo(type);
         assertThat(result.categoryTitle()).isEqualTo(category.getTitle());
         assertThat(result.categoryColor()).isEqualTo(category.getColor());
         assertThat(result.categoryIcon()).isEqualTo(category.getIcon());

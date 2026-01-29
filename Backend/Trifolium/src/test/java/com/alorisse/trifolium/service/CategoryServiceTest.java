@@ -38,7 +38,7 @@ public class CategoryServiceTest {
     void shouldCreateCategorySuccessfully() {
         User user = buildUser();
 
-        Category category = buildCategory(user);
+        Category category = buildCategory("Title",  user);
         Long id = category.getId();
         String title = category.getTitle();
         String color = category.getColor();
@@ -69,7 +69,7 @@ public class CategoryServiceTest {
     void shouldListUserAndSystemCategories() {
         User user = buildUser();
 
-        Category categoryByUser = buildCategory(user);
+        Category categoryByUser = buildCategory("Title",  user);
         String titleByUser = categoryByUser.getTitle();
         String colorByUser = categoryByUser.getColor();
         String iconByUser = categoryByUser.getIcon();
@@ -117,23 +117,15 @@ public class CategoryServiceTest {
     void shouldUpdateCategorySuccessfully() {
         User user = buildUser();
 
-        Category oldCategory = buildCategory(user);
+        Category oldCategory = buildCategory("Title",  user);
         Long id = oldCategory.getId();
 
-        String newTitle = "Fare";
-        String newColor = "#FFFFBB";
-        String newIcon = "fare_icon";
+        Category newCategory = buildCategory("Fare", user);
+        String newTitle = newCategory.getTitle();
+        String newColor = newCategory.getColor();
+        String newIcon = newCategory.getIcon();
 
         CategoryRequestDTO newRequest = new CategoryRequestDTO(newTitle, newColor, newIcon);
-
-
-        // TODO add another argument to factory to simplify this
-        Category newCategory = new Category();
-        newCategory.setId(id);
-        newCategory.setTitle(newTitle);
-        newCategory.setColor(newColor);
-        newCategory.setIcon(newIcon);
-        newCategory.setUser(user);
 
         CategoryResponseDTO expectedResponse = new CategoryResponseDTO(id, newTitle, newColor, newIcon);
 
@@ -159,7 +151,7 @@ public class CategoryServiceTest {
     void shouldDeleteCategory() {
         User user = buildUser();
 
-        Category category = buildCategory(user);
+        Category category = buildCategory("Title",  user);
         Long id = category.getId();
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
@@ -176,7 +168,6 @@ public class CategoryServiceTest {
 
         Long invalidID = 999L;
 
-        // TODO Make a factory for CategoryResquestDTO
         String title = "Food";
         String color = "#FFBBCC";
         String icon = "food_icon";
@@ -201,7 +192,7 @@ public class CategoryServiceTest {
         User notOwner = new User();
         notOwner.setId(999L);
 
-        Category category = buildCategory(owner);
+        Category category = buildCategory("Title", owner);
 
         Long id = 1L;
 
@@ -218,16 +209,15 @@ public class CategoryServiceTest {
     private User buildUser() {
         User user = new User();
         user.setId(1L);
-        user.setEmail("test@test.com");
 
         return user;
     }
 
-    private Category buildCategory(User user) {
+    private Category buildCategory(String title, User user) {
         Category category = new Category();
         category.setId(1L);
-        category.setTitle("Food");
-        category.setColor("FFBBCC");
+        category.setTitle(title);
+        category.setColor("#FFBBCC");
         category.setIcon("food_icon");
         category.setUser(user);
 
