@@ -14,6 +14,9 @@ public class UserMapper {
         User entity = new User();
         entity.setUsername(dto.username());
         entity.setEmail(dto.email());
+       if (dto.currency() != null && !dto.currency().isBlank()) {
+           entity.setCurrency(dto.currency());
+       }
         return entity;
     }
 
@@ -33,7 +36,8 @@ public class UserMapper {
         return new UserResponseDTO(
                 entity.getId(),
                 entity.getUsername(),
-                entity.getEmail()
+                entity.getEmail(),
+                entity.getCurrency()
         );
     }
 

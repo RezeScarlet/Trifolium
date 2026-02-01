@@ -2,12 +2,9 @@ package com.alorisse.trifolium.controller;
 
 import com.alorisse.trifolium.model.dto.CategoryRequestDTO;
 import com.alorisse.trifolium.model.dto.CategoryResponseDTO;
-import com.alorisse.trifolium.model.entity.Category;
 import com.alorisse.trifolium.model.entity.User;
-import com.alorisse.trifolium.repository.UserRepository;
 import com.alorisse.trifolium.service.CategoryService;
 import jakarta.validation.Valid;
-import org.hibernate.validator.internal.util.actions.GetDeclaredMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

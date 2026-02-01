@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(25) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password BYTEA,
+    currency CHAR(3) NOT NULL DEFAULT 'USD',
     provider_id VARCHAR(255),
     provider VARCHAR(6)
 );

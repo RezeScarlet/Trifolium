@@ -2,6 +2,7 @@ package com.alorisse.trifolium.model.entity;
 
 import com.alorisse.trifolium.model.enums.AuthProvider;
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -19,6 +20,10 @@ public class User {
 
     @Column(name = "password")
     private byte[] password;
+
+    @Column(name = "currency", nullable = false, length = 3)
+    @ColumnDefault("'USD'")
+    private String currency = "USD";
 
     @Column(name = "provider_id")
     private String providerId;
@@ -42,6 +47,8 @@ public class User {
     public byte[] getPassword() {
         return this.password;
     }
+
+    public String getCurrency() { return currency; }
 
     public String getProviderId() {
         return this.providerId;
@@ -67,11 +74,9 @@ public class User {
         this.password = password;
     }
 
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
-    }
+    public void setCurrency(String currency) { this.currency = currency; }
 
-    public void setProvider(AuthProvider provider) {
-        this.provider = provider;
-    }
+    public void setProviderId(String providerId) { this.providerId = providerId; }
+
+    public void setProvider(AuthProvider provider) { this.provider = provider; }
 }

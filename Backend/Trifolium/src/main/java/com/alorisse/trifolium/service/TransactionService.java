@@ -9,7 +9,6 @@ import com.alorisse.trifolium.model.entity.User;
 import com.alorisse.trifolium.model.enums.Type;
 import com.alorisse.trifolium.repository.CategoryRepository;
 import com.alorisse.trifolium.repository.TransactionRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

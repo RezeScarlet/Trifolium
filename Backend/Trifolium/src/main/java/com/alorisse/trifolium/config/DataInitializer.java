@@ -2,6 +2,7 @@ package com.alorisse.trifolium.config;
 
 import com.alorisse.trifolium.model.entity.Category;
 import com.alorisse.trifolium.repository.CategoryRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +19,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String @NonNull ... args) {
         List<String> defaultCategories = Arrays.asList(
                 "CAT_BILLS",
                 "CAT_DINING",

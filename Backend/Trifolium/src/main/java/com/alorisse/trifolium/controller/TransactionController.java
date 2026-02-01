@@ -3,7 +3,6 @@ package com.alorisse.trifolium.controller;
 import com.alorisse.trifolium.model.dto.TransactionRequestDTO;
 import com.alorisse.trifolium.model.dto.TransactionResponseDTO;
 import com.alorisse.trifolium.model.entity.User;
-import com.alorisse.trifolium.repository.UserRepository;
 import com.alorisse.trifolium.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
