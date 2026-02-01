@@ -31,7 +31,7 @@ public class CategoryServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;
-    
+
     @Captor
     private ArgumentCaptor<Category> categoryCaptor;
 
@@ -40,7 +40,7 @@ public class CategoryServiceTest {
     void shouldCreateCategorySuccessfully() {
         User user = buildUser();
 
-        Category category = buildCategory("Title",  user);
+        Category category = buildCategory(user);
         Long id = category.getId();
         String title = category.getTitle();
         String color = category.getColor();
@@ -71,7 +71,7 @@ public class CategoryServiceTest {
     void shouldReturnAllUserAndSystemCategories() {
         User user = buildUser();
 
-        Category categoryByUser = buildCategory("Title",  user);
+        Category categoryByUser = buildCategory(user);
         String titleByUser = categoryByUser.getTitle();
         String colorByUser = categoryByUser.getColor();
         String iconByUser = categoryByUser.getIcon();
@@ -119,9 +119,9 @@ public class CategoryServiceTest {
     void shouldUpdateCategorySuccessfully() {
         User user = buildUser();
 
-        Category oldCategory = buildCategory("Title",  user);
+        Category oldCategory = buildCategory(user);
         Long id = oldCategory.getId();
-        
+
         String newTitle = "Fare";
         String newColor = oldCategory.getColor();
         String newIcon = oldCategory.getIcon();
@@ -155,7 +155,7 @@ public class CategoryServiceTest {
     void shouldDeleteCategory() {
         User user = buildUser();
 
-        Category category = buildCategory("Title",  user);
+        Category category = buildCategory(user);
         Long id = category.getId();
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
@@ -194,7 +194,7 @@ public class CategoryServiceTest {
         User notOwner = new User();
         notOwner.setId(999L);
 
-        Category category = buildCategory("Title", owner);
+        Category category = buildCategory(owner);
 
         Long id = 1L;
 
@@ -205,7 +205,7 @@ public class CategoryServiceTest {
         verify(categoryRepository).findById(id);
         verify(categoryRepository, never()).delete(category);
     }
-    
+
     @Test
     @DisplayName("Should fail to update category belonging to another user")
     void shouldFailToUpdateCategoryOfAnotherUser() {
@@ -214,9 +214,9 @@ public class CategoryServiceTest {
         User anotherUser = new User();
         anotherUser.setId(999L);
 
-        Category category = buildCategory("Title", owner);
+        Category category = buildCategory(owner);
         Long id = category.getId();
-        
+
         CategoryRequestDTO request = new CategoryRequestDTO("Other Title", null, null);
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
@@ -234,10 +234,10 @@ public class CategoryServiceTest {
         return user;
     }
 
-    private Category buildCategory(String title, User user) {
+    private Category buildCategory(User user) {
         Category category = new Category();
         category.setId(1L);
-        category.setTitle(title);
+        category.setTitle("Title");
         category.setColor("#FFBBCC");
         category.setIcon("food_icon");
         category.setUser(user);
