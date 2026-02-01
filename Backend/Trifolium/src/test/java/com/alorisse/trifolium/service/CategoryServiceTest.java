@@ -9,8 +9,7 @@ import com.alorisse.trifolium.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -32,6 +31,9 @@ public class CategoryServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;
+    
+    @Captor
+    private ArgumentCaptor<Category> categoryCaptor;
 
     @Test
     @DisplayName("Should create a category successfully")
@@ -47,11 +49,11 @@ public class CategoryServiceTest {
         CategoryRequestDTO request = new CategoryRequestDTO(title, color, icon);
 
 
-        CategoryResponseDTO expectedResponse = new CategoryResponseDTO(id, title, color, icon);
+        CategoryResponseDTO response = new CategoryResponseDTO(id, title, color, icon);
 
         when(categoryMapper.toEntity(request, user)).thenReturn(category);
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
-        when(categoryMapper.toDTO(category)).thenReturn(expectedResponse);
+        when(categoryMapper.toDTO(category)).thenReturn(response);
 
         CategoryResponseDTO result = categoryService.create(request, user);
 
@@ -61,12 +63,12 @@ public class CategoryServiceTest {
         assertThat(result.color()).isEqualTo(color);
         assertThat(result.icon()).isEqualTo(icon);
 
-        verify(categoryRepository, times(1)).save(any(Category.class));
+        verify(categoryRepository).save(category);
     }
 
     @Test
-    @DisplayName("Should list User and System Categories")
-    void shouldListUserAndSystemCategories() {
+    @DisplayName("Should return all user and system categories")
+    void shouldReturnAllUserAndSystemCategories() {
         User user = buildUser();
 
         Category categoryByUser = buildCategory("Title",  user);
@@ -109,41 +111,43 @@ public class CategoryServiceTest {
 
         assertThat(result).containsExactlyInAnyOrder(responseByUser, responseBySystem);
 
-        verify(categoryRepository, times(1)).findAllByUserIdOrSystemOrderById(user.getId());
+        verify(categoryRepository).findAllByUserIdOrSystemOrderById(user.getId());
     }
 
     @Test
-    @DisplayName("Should update Category successfully")
+    @DisplayName("Should update category successfully")
     void shouldUpdateCategorySuccessfully() {
         User user = buildUser();
 
         Category oldCategory = buildCategory("Title",  user);
         Long id = oldCategory.getId();
-
-        Category newCategory = buildCategory("Fare", user);
-        String newTitle = newCategory.getTitle();
-        String newColor = newCategory.getColor();
-        String newIcon = newCategory.getIcon();
+        
+        String newTitle = "Fare";
+        String newColor = oldCategory.getColor();
+        String newIcon = oldCategory.getIcon();
 
         CategoryRequestDTO newRequest = new CategoryRequestDTO(newTitle, newColor, newIcon);
 
-        CategoryResponseDTO expectedResponse = new CategoryResponseDTO(id, newTitle, newColor, newIcon);
+        CategoryResponseDTO response = new CategoryResponseDTO(id, newTitle, newColor, newIcon);
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(oldCategory));
 
-        when(categoryRepository.save(any(Category.class))).thenReturn(newCategory);
+        when(categoryRepository.save(any(Category.class))).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
-        when(categoryMapper.toDTO(newCategory)).thenReturn(expectedResponse);
+        when(categoryMapper.toDTO(any(Category.class))).thenReturn(response);
 
         CategoryResponseDTO result = categoryService.update(id, newRequest, user);
 
         assertThat(result).isNotNull();
-        assertThat(result.id()).isEqualTo(id);
-        assertThat(result.title()).isEqualTo(newTitle);
-        assertThat(result.color()).isEqualTo(newColor);
-        assertThat(result.icon()).isEqualTo(newIcon);
 
-        verify(categoryRepository, times(1)).save(any(Category.class));
+        verify(categoryRepository).save(categoryCaptor.capture());
+
+        Category newCategory = categoryCaptor.getValue();
+
+        assertThat(newCategory.getId()).isEqualTo(id);
+        assertThat(newCategory.getTitle()).isEqualTo(newTitle);
+        assertThat(newCategory.getColor()).isEqualTo(newColor);
+        assertThat(newCategory.getIcon()).isEqualTo(newIcon);
     }
 
     @Test
@@ -158,12 +162,12 @@ public class CategoryServiceTest {
 
         categoryService.delete(id, user);
 
-        verify(categoryRepository, times(1)).delete(category);
+        verify(categoryRepository).delete(category);
     }
 
     @Test
-    @DisplayName("Should throw exception when Category not Found")
-    void shouldThrowExceptionWhenCategoryNotFound() {
+    @DisplayName("Should fail to update non-existent category")
+    void shouldFailToUpdateNonExistentCategory() {
         User user = buildUser();
 
         Long invalidID = 999L;
@@ -178,13 +182,13 @@ public class CategoryServiceTest {
 
         assertThrows(RuntimeException.class, () -> categoryService.update(invalidID, request, user));
 
-        verify(categoryRepository, times(1)).findById(invalidID);
-        verify(categoryRepository, never()).save(any());
+        verify(categoryRepository).findById(invalidID);
+        verify(categoryRepository, never()).save(any(Category.class));
     }
 
     @Test
-    @DisplayName("Should throw exception when User is not owner")
-    void shouldThrowExceptionWhenUserIsNotOwner() {
+    @DisplayName("Should fail to delete category belonging to another user")
+    void shouldFailToDeleteCategoryOfAnotherUser() {
         User owner = buildUser();
 
         User notOwner = new User();
@@ -198,8 +202,29 @@ public class CategoryServiceTest {
 
         assertThrows(RuntimeException.class, () -> categoryService.delete(id, notOwner));
 
-        verify(categoryRepository, times(1)).findById(id);
-        verify(categoryRepository, never()).delete(any());
+        verify(categoryRepository).findById(id);
+        verify(categoryRepository, never()).delete(category);
+    }
+    
+    @Test
+    @DisplayName("Should fail to update category belonging to another user")
+    void shouldFailToUpdateCategoryOfAnotherUser() {
+        User owner = buildUser();
+
+        User anotherUser = new User();
+        anotherUser.setId(999L);
+
+        Category category = buildCategory("Title", owner);
+        Long id = category.getId();
+        
+        CategoryRequestDTO request = new CategoryRequestDTO("Other Title", null, null);
+
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
+
+        assertThrows(RuntimeException.class, () -> categoryService.update(id, request, anotherUser));
+
+        verify(categoryRepository).findById(id);
+        verify(categoryRepository, never()).save(any());
     }
 
     private User buildUser() {
