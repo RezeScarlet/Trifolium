@@ -67,7 +67,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Should return all user and system categories")
+    @DisplayName("Should return all user and system categories successfully")
     void shouldReturnAllUserAndSystemCategories() {
         User user = buildUser();
 
@@ -151,7 +151,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Should delete Category")
+    @DisplayName("Should delete category successfully")
     void shouldDeleteCategory() {
         User user = buildUser();
 
