@@ -6,7 +6,7 @@
   "documentation" : { },
   "id" : 1,
   "lastModifiedAgent" : "structurizr-ui",
-  "lastModifiedDate" : "2026-01-07T14:47:54Z",
+  "lastModifiedDate" : "2026-02-12T14:47:50Z",
   "model" : {
     "people" : [ {
       "description" : "Someone interested in managing their personal finances",
@@ -133,7 +133,7 @@
   "views" : {
     "configuration" : {
       "branding" : { },
-      "lastSavedView" : "Containers",
+      "lastSavedView" : "Contexto",
       "metadataSymbols" : "SquareBrackets",
       "styles" : {
         "elements" : [ {
@@ -176,24 +176,24 @@
       },
       "elements" : [ {
         "id" : "1",
-        "x" : 2470,
-        "y" : 1034
+        "x" : 2469,
+        "y" : 1033
       }, {
         "id" : "3",
-        "x" : 220,
-        "y" : 180
+        "x" : 219,
+        "y" : 179
       }, {
         "id" : "4",
-        "x" : 970,
-        "y" : 180
+        "x" : 969,
+        "y" : 179
       }, {
         "id" : "5",
-        "x" : 1720,
-        "y" : 180
+        "x" : 1719,
+        "y" : 179
       }, {
         "id" : "6",
-        "x" : 1720,
-        "y" : 780
+        "x" : 1719,
+        "y" : 779
       } ],
       "externalSoftwareSystemBoundariesVisible" : false,
       "key" : "Containers",
@@ -208,8 +208,8 @@
       }, {
         "id" : "7",
         "vertices" : [ {
-          "x" : 1720,
-          "y" : 1230
+          "x" : 1719,
+          "y" : 1229
         } ]
       }, {
         "id" : "9"
@@ -218,7 +218,7 @@
     } ],
     "systemContextViews" : [ {
       "automaticLayout" : {
-        "applied" : false,
+        "applied" : true,
         "edgeSeparation" : 0,
         "implementation" : "Graphviz",
         "nodeSeparation" : 300,
@@ -226,18 +226,22 @@
         "rankSeparation" : 300,
         "vertices" : false
       },
+      "dimensions" : {
+        "height" : 1054,
+        "width" : 2300
+      },
       "elements" : [ {
         "id" : "1",
-        "x" : 0,
-        "y" : 0
+        "x" : 200,
+        "y" : 414
       }, {
         "id" : "2",
-        "x" : 0,
-        "y" : 0
+        "x" : 900,
+        "y" : 160
       }, {
         "id" : "6",
-        "x" : 0,
-        "y" : 0
+        "x" : 1650,
+        "y" : 464
       } ],
       "enterpriseBoundaryVisible" : true,
       "key" : "Contexto",
