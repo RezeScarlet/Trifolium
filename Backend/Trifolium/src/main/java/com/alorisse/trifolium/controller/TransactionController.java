@@ -1,5 +1,7 @@
 package com.alorisse.trifolium.controller;
 
+import com.alorisse.trifolium.model.dto.CategorySummaryDTO;
+import com.alorisse.trifolium.model.dto.GeneralSummaryDTO;
 import com.alorisse.trifolium.model.dto.TransactionRequestDTO;
 import com.alorisse.trifolium.model.dto.TransactionResponseDTO;
 import com.alorisse.trifolium.model.entity.User;
@@ -56,4 +58,28 @@ public class TransactionController {
 
     }
 
+    @PostMapping("/sync")
+    public ResponseEntity<List<TransactionResponseDTO>> sync(@RequestBody @Valid List<TransactionRequestDTO> dtos, Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        List<TransactionResponseDTO> response = transactionService.sync(dtos, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/summary/expenses")
+    public ResponseEntity<List<CategorySummaryDTO>> getExpensesSummary(Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        return ResponseEntity.ok(transactionService.getExpensesSummary(user));
+    }
+
+    @GetMapping("/summary/income")
+    public ResponseEntity<List<CategorySummaryDTO>> getIncomeSummary(Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        return ResponseEntity.ok(transactionService.getIncomeSummary(user));
+    }
+
+    @GetMapping("/summary/general")
+    public ResponseEntity<GeneralSummaryDTO> getGeneralSummary(Authentication authentication) {
+        User user = getAuthenticatedUser(authentication);
+        return ResponseEntity.ok(transactionService.getGeneralSummary(user));
+    }
 }
