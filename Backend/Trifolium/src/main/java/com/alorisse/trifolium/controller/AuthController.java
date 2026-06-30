@@ -8,6 +8,7 @@ import com.alorisse.trifolium.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +33,10 @@ public class AuthController {
     public ResponseEntity<UserLoginResponseDTO> login(@RequestBody @Valid UserLoginRequestDTO  dto) {
         UserLoginResponseDTO response = userService.login(dto);
         return  ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken() {
+        return ResponseEntity.ok().build();
     }
 }
